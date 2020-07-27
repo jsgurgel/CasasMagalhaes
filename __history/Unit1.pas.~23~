@@ -1,0 +1,91 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    Edit1: TEdit;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+Function domainName(Value:String):String;
+Var
+  I:Integer;
+  fValue:String;
+Begin
+  fValue := 'Favor informar a URL';
+  if Trim(Value) <>'' then
+  Begin
+    I:=Pos('.', Value);
+    fValue := Copy(Value, I+1, Length(Value));
+    I:=Pos('.', fValue);
+    fValue := Copy(fValue, 1, I-1);
+    if fValue = '' then
+    Begin
+      I:=Pos('.', Value);
+      fValue := Copy(Value, 1, I-1);
+      I:=Pos(':', fValue);
+      fValue := Copy(fValue, I+3, Length(fValue));
+    End;
+  End;
+  Result:=fValue;
+End;
+
+Function Cript(Value:String):String;
+Function _Cript(Value:String):String;
+Begin
+  Result := IntToStr(Ord(Char(Value[1]))) + Value[Length(Value)]  + Copy(Value, 3, Length(Value) - 3) + Value[2];
+End;
+
+VAr
+  I:INteger;
+  Palavra, Fase:String;
+Begin
+  Palavra := '';
+  Fase := '';
+  for I := 1 to Length(Value) do
+    if (Value[I] <> ' ') and (I <=  Length(Value)) then
+    Begin
+      Palavra := Palavra + Value[I]; ShowMEssage(Palavra);
+      if (Value[I + 1] = ' ') or (Value[I + 1] = '') then
+      Begin
+        Fase := Fase + Value[I+1] + Palavra;
+        if Value[I+1] <> '' then
+          Palavra := '';
+      end;
+    end;
+   //  Fase := Fase + Value[I] + Palavra;
+ //  ShowMessage(Fase);
+   Result := Fase;
+  //Result := IntToStr(Ord(Char(Value[1]))) + Value[Length(Value)]  + Copy(Value, 3, Length(Value) - 3) + Value[2];
+End;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  ShowMessage(domainName(Edit1.text));
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  ShowMessage(Cript(Edit1.Text));
+end;
+
+end.
+// https://jsonplaceholder.typicode.com/
